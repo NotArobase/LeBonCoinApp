@@ -13,6 +13,9 @@
         android:theme="@style/Theme.LeBonCoinApp"
         tools:targetApi="31">
         <activity
+            android:name=".AdViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdAddActivity"
             android:exported="false" />
         <activity
