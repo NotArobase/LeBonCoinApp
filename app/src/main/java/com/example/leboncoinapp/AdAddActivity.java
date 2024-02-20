@@ -31,6 +31,8 @@ public class AdAddActivity extends AppCompatActivity {
         validateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String titre = textInputEditText.getText().toString();
+                String adresse = textInputEditTextAdresse.getText().toString();
                 Intent intent = new Intent(AdAddActivity.this, AdListViewActivity.class);
                 intent.putExtra("title", titre);
                 intent.putExtra("address", adresse);

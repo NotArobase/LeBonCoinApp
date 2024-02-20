@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import android.widget.AdapterView;
 import android.view.View;
 import android.content.Intent;
+import android.view.MenuItem;
+
 
 public class AdListViewActivity extends AppCompatActivity {
 
@@ -20,7 +22,7 @@ public class AdListViewActivity extends AppCompatActivity {
         AdModel admodel2 = new AdModel("Tuyaux", "Bourseul, Douai", R.drawable.tuyaux);
         AdModel admodel3 = new AdModel("Tuile", "Bourseul, Douai", R.drawable.tuile);
         AdModel admodel4 = new AdModel("Feutrine", "Bourseul, Douai", R.drawable.feutrine);
-        AdModel admodel5 = new AdModel("plot", "Bourseul, Douai", R.drawable.plot);
+        AdModel admodel5 = new AdModel("Plot", "Bourseul, Douai", R.drawable.plot);
 
         ArrayList<AdModel> listAdModel = new ArrayList<AdModel>();
 
@@ -61,8 +63,25 @@ public class AdListViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+        // Retour sur MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }

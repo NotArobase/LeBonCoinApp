@@ -17,9 +17,11 @@
             android:exported="false" />
         <activity
             android:name=".AdAddActivity"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".AdListViewActivity"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
