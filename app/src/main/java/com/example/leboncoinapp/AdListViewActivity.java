@@ -24,6 +24,17 @@ public class AdListViewActivity extends AppCompatActivity {
 
         ArrayList<AdModel> listAdModel = new ArrayList<AdModel>();
 
+        Intent intent = getIntent();
+        String newTitle = intent.getStringExtra("title");
+        String newAddress = intent.getStringExtra("address");
+
+        // Si des informations sont reçues, ajoutez une nouvelle annonce à votre liste
+        if (newTitle != null && newAddress != null) {
+            // Créer une nouvelle annonce avec les informations reçues
+            AdModel newAd = new AdModel(newTitle, newAddress, R.drawable.buche); // Vous devrez remplacer R.drawable.placeholder_image par l'identifiant réel de l'image
+            listAdModel.add(newAd);
+        }
+
         listAdModel.add(admodel1);
         listAdModel.add(admodel2);
         listAdModel.add(admodel3);
