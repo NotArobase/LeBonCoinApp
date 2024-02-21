@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
+import android.graphics.Matrix;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -157,7 +159,48 @@ public class AdAddActivity extends AppCompatActivity {
     private void setPic() {
         // Decode the image file into a Bitmap without scaling
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+
+        try {
+            ExifInterface exif = new ExifInterface(currentPhotoPath);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            bitmap = rotateBitmap(bitmap, orientation);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         imageView.setImageBitmap(bitmap);
+    }
+
+    private Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.postRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.postRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.postRotate(270);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setScale(1, -1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            default:
+                return bitmap;
+        }
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
 }
