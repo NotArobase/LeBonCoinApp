@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import android.os.Build;
 
 
 import android.content.ActivityNotFoundException;
@@ -145,6 +147,7 @@ public class AdAddActivity extends AppCompatActivity {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, REQUEST_IMAGE_FROM_GALLERY);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -159,6 +162,10 @@ public class AdAddActivity extends AppCompatActivity {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                 // Save the image to a temporary file
                 File tempFile = createImageFile();
+
+                // Rotate the bitmap to correct orientation before saving
+                bitmap = rotateImageFromGallery(selectedImageUri, bitmap);
+
                 FileOutputStream out = new FileOutputStream(tempFile);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
@@ -180,7 +187,11 @@ public class AdAddActivity extends AppCompatActivity {
         try {
             ExifInterface exif = new ExifInterface(currentPhotoPath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            bitmap = rotateBitmap(bitmap, orientation);
+
+            if (orientation != ExifInterface.ORIENTATION_UNDEFINED) {
+                // Orientation found in EXIF, rotate the image accordingly
+                bitmap = rotateBitmap(bitmap, orientation);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -200,24 +211,39 @@ public class AdAddActivity extends AppCompatActivity {
             case ExifInterface.ORIENTATION_ROTATE_270:
                 matrix.postRotate(270);
                 break;
-            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-                matrix.setScale(-1, 1);
-                break;
-            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                matrix.setScale(1, -1);
-                break;
-            case ExifInterface.ORIENTATION_TRANSPOSE:
-                matrix.setRotate(90);
-                matrix.postScale(-1, 1);
-                break;
-            case ExifInterface.ORIENTATION_TRANSVERSE:
-                matrix.setRotate(-90);
-                matrix.postScale(-1, 1);
-                break;
             default:
                 return bitmap;
         }
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+
+    private Bitmap rotateImageFromGallery(Uri imageUri, Bitmap bitmap) throws IOException {
+        InputStream input = getContentResolver().openInputStream(imageUri);
+        ExifInterface ei;
+        if (Build.VERSION.SDK_INT > 23)
+            ei = new ExifInterface(input);
+        else
+            ei = new ExifInterface(imageUri.getPath());
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(bitmap, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(bitmap, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(bitmap, 270);
+            default:
+                return bitmap;
+        }
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
 }
