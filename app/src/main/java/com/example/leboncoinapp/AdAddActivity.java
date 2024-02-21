@@ -8,9 +8,6 @@ import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 
-
-
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,6 +25,7 @@ import android.graphics.Bitmap;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Locale;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -102,16 +100,18 @@ public class AdAddActivity extends AppCompatActivity {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             try {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            } catch (ActivityNotFoundException e) {
-                // Camera app is not available or cannot be started
-                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                File photoFile = createImageFile();
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.example.leboncoinapp.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
             } catch (Exception e) {
-                Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
+                Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
         } else {
             // No app can handle the intent
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
@@ -119,9 +119,9 @@ public class AdAddActivity extends AppCompatActivity {
     }
 
 
-
     private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -130,24 +130,23 @@ public class AdAddActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
+        // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
 
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, REQUEST_IMAGE_FROM_GALLERY);
     }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            // Do something with the image (e.g., display it in an ImageView)
+            // Picture was taken successfully, display it
+            setPic();
         } else if (requestCode == REQUEST_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
             // Image selected from gallery, set it to the ImageView
             Uri selectedImageUri = data.getData();
@@ -155,29 +154,10 @@ public class AdAddActivity extends AppCompatActivity {
             currentPhotoPath = selectedImageUri.getPath();
         }
     }
-
-
     private void setPic() {
-        // Get the dimensions of the View
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        // Decode the image file into a Bitmap without scaling
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
         imageView.setImageBitmap(bitmap);
     }
+
 }
