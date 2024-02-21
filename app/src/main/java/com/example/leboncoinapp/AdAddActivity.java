@@ -7,6 +7,8 @@ import android.content.ActivityNotFoundException;
 import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
+import java.io.FileOutputStream;
+
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -151,12 +153,26 @@ public class AdAddActivity extends AppCompatActivity {
             // Picture was taken successfully, display it
             setPic();
         } else if (requestCode == REQUEST_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
-            // Image selected from gallery, set it to the ImageView
+            // Image selected from gallery
             Uri selectedImageUri = data.getData();
-            imageView.setImageURI(selectedImageUri);
-            currentPhotoPath = selectedImageUri.getPath();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                // Save the image to a temporary file
+                File tempFile = createImageFile();
+                FileOutputStream out = new FileOutputStream(tempFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+                // Update the current photo path and display the image
+                currentPhotoPath = tempFile.getAbsolutePath();
+                setPic();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
     private void setPic() {
         // Decode the image file into a Bitmap without scaling
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
