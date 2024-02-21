@@ -1,11 +1,13 @@
 package com.example.leboncoinapp;
+import android.graphics.drawable.Drawable;
 
 public class AdModel {
     private String title;
     private String address;
-    private int image;
+    private Drawable image;
+
     // Constructor
-    public AdModel(String title, String address, int image) {
+    public AdModel(String title, String address, Drawable image) {
         this.title = title;
         this.address = address;
         this.image = image;
@@ -19,7 +21,7 @@ public class AdModel {
         return address;
     }
 
-    public int getImage() {
+    public Drawable getImage() {
         return image;
     }
     public void setTitle(String title) {
