@@ -9,6 +9,12 @@ import android.widget.AdapterView;
 import android.view.View;
 import android.content.Intent;
 import android.view.MenuItem;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+
+
 
 
 public class AdListViewActivity extends AppCompatActivity {
@@ -29,11 +35,18 @@ public class AdListViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String newTitle = intent.getStringExtra("title");
         String newAddress = intent.getStringExtra("address");
+        String img_path = intent.getStringExtra("image_path");
 
         // Si des informations sont reçues, ajoutez une nouvelle annonce à votre liste
-        if (newTitle != null && newAddress != null) {
-            // Créer une nouvelle annonce avec les informations reçues
-            AdModel newAd = new AdModel(newTitle, newAddress, R.drawable.buche); // Vous devrez remplacer R.drawable.placeholder_image par l'identifiant réel de l'image
+        if (newTitle != null && newAddress != null && img_path != null) {
+            // Load the image from the file path
+            Bitmap bitmap = BitmapFactory.decodeFile(img_path);
+
+            // Convert the bitmap to a drawable
+            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+
+            // Create a new ad with the received information and the loaded image
+            AdModel newAd = new AdModel(newTitle, newAddress, drawable);
             listAdModel.add(newAd);
         }
 

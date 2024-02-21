@@ -24,6 +24,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 
 import com.google.android.material.textfield.TextInputEditText;
 
