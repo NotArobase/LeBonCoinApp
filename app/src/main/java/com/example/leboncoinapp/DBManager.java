@@ -59,7 +59,7 @@ public class DBManager {
         cursor.close();
         return count > 0;
     }
-    private void resetDatabase() {
+    public void resetDatabase() {
         // Open the database
         open();
 

@@ -9,6 +9,8 @@ import android.view.View;
 import android.content.Intent;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +43,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.main_menu,menu);
         return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            resetDatabase();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void resetDatabase() {
+        DBManager dbManager = DBManager.getDBManager(this);
+        dbManager.open();
+        dbManager.resetDatabase();
+        // Notify the user that the database has been reset, if needed
     }
 }
