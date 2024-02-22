@@ -63,9 +63,10 @@ public class AdListViewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // Clear the activity stack and go back to MainActivity
         super.onBackPressed();
-        // Retour sur MainActivity
         Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
     }

@@ -94,10 +94,13 @@ public class AdAddActivity extends AppCompatActivity {
                     return;
                 }
 
+                DBManager dbManager = DBManager.getDBManager(AdAddActivity.this);
+                dbManager.open();
+                dbManager.insert(new DBAdModel(titre, adresse, currentPhotoPath));
+                dbManager.close();
+
+                // Navigate back to the list view activity
                 Intent intent = new Intent(AdAddActivity.this, AdListViewActivity.class);
-                intent.putExtra("title", titre);
-                intent.putExtra("address", adresse);
-                intent.putExtra("image_path", currentPhotoPath);
                 startActivity(intent);
             }
         });

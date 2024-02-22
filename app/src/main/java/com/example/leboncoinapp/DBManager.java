@@ -16,7 +16,8 @@ public class DBManager {
 
     private DBManager(Context c) {
         context = c;
-        init(); // Useful for adding ads for the first time.
+        //resetDatabase();
+        //init(); // Useful for adding ads for the first time.
     }
 
     public static DBManager getDBManager(Context context) {
@@ -37,14 +38,36 @@ public class DBManager {
     }
 
     // Add ads manually.
-    public void init(){
+    public void init() {
+        if (!dataExists()) {
+            open();
+            insert(new DBAdModel("Wood", "Douai", "https://media.istockphoto.com/id/134253640/photo/construction-of-a-wooden-roof-frame-underway.jpg?s=612x612&w=0&k=20&c=e5gUkic9LGQWahIdHozOsEzHKy_HtsmvmtOHmYsejSU="));
+            insert(new DBAdModel("Steel", "Lille", "https://as2.ftcdn.net/v2/jpg/03/91/83/87/1000_F_391838708_4HFADW5beay2VVlnoual6Qi5fWeIaD9V.jpg"));
+            insert(new DBAdModel("Clay", "Douai", "https://constrofacilitator.com/wp-content/uploads/2020/02/clay-in-construction.jpg"));
+            insert(new DBAdModel("Metal", "Lyon", "https://www.meto-constructions.fr/wp-content/uploads/2018/12/IMG_6067.jpg"));
+            insert(new DBAdModel("Glass", "Valenciennes", "https://i0.wp.com/www.tipsnepal.com/wp-content/uploads/2020/09/simple-float-glass-1505049573-3306125.jpeg?resize=500%2C317&quality=100&strip=all&ssl=1"));
+            insert(new DBAdModel("Wood", "Orchies", "https://yieldpro.com/wp-content/uploads/2020/08/lumber1.jpg"));
+            close();
+        }
+    }
+
+    private boolean dataExists() {
+        // Check if data already exists in the database
+        Cursor cursor = database.rawQuery("SELECT COUNT(*) FROM " + DBHelper.TABLE_NAME, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
+    }
+    private void resetDatabase() {
+        // Open the database
         open();
-        insert(new DBAdModel("Wood", "Douai", "https://media.istockphoto.com/id/134253640/photo/construction-of-a-wooden-roof-frame-underway.jpg?s=612x612&w=0&k=20&c=e5gUkic9LGQWahIdHozOsEzHKy_HtsmvmtOHmYsejSU="));
-        insert(new DBAdModel("Steel", "Lille", "https://as2.ftcdn.net/v2/jpg/03/91/83/87/1000_F_391838708_4HFADW5beay2VVlnoual6Qi5fWeIaD9V.jpg"));
-        insert(new DBAdModel("Clay", "Douai", "https://constrofacilitator.com/wp-content/uploads/2020/02/clay-in-construction.jpg"));
-        insert(new DBAdModel("Metal", "Lyon", "https://www.meto-constructions.fr/wp-content/uploads/2018/12/IMG_6067.jpg"));
-        insert(new DBAdModel("Glass", "Valenciennes", "https://i0.wp.com/www.tipsnepal.com/wp-content/uploads/2020/09/simple-float-glass-1505049573-3306125.jpeg?resize=500%2C317&quality=100&strip=all&ssl=1"));
-        insert(new DBAdModel("Wood", "Orchies", "https://yieldpro.com/wp-content/uploads/2020/08/lumber1.jpg"));
+
+        // Delete all rows from the table
+        database.delete(DBHelper.TABLE_NAME, null, null);
+
+        // Close the database connection
+        //close();
     }
 
     public void insert(DBAdModel ad) {
@@ -80,4 +103,7 @@ public class DBManager {
     public DBAdModel getById(int id){
         return dbHelper.getById(id);
     }
+
+
 }
+

@@ -9,6 +9,8 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import android.net.Uri;
+
 
 
 public class DBAdAdapter extends CursorAdapter {
@@ -40,6 +42,12 @@ public class DBAdAdapter extends CursorAdapter {
         idTextView.setText(id);
         titleTextView.setText(title);
         addressTextView.setText(address);
-        Glide.with(view).load(image).into(imageView); // Glide is a library to insert an image into an imageview with a URL
+        if (image != null && image.startsWith("http")) {
+            // Use Glide to load the image from URL
+            Glide.with(context).load(image).into(imageView);
+        } else {
+            // Load the local image using the file path
+            imageView.setImageURI(Uri.parse(image));
+        } // Glide is a library to insert an image into an imageview with a URL
     }
 }
