@@ -42,12 +42,6 @@ public class DBAdAdapter extends CursorAdapter {
         idTextView.setText(id);
         titleTextView.setText(title);
         addressTextView.setText(address);
-        if (image != null && image.startsWith("http")) {
-            // Use Glide to load the image from URL
-            Glide.with(context).load(image).into(imageView);
-        } else {
-            // Load the local image using the file path
-            imageView.setImageURI(Uri.parse(image));
-        } // Glide is a library to insert an image into an imageview with a URL
+        Glide.with(context).load(image).into(imageView); // Glide is a library to insert an image into an imageview with a URL
     }
 }
