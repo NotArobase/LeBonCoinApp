@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class AdViewActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +19,7 @@ public class AdViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String adTitle = intent.getStringExtra("adTitle");
         String adAddress = intent.getStringExtra("adAddress");
-        int adImage = intent.getIntExtra("adImage", 0);
+        String adImage = intent.getStringExtra("adImage");
 
         TextView titleTextView = findViewById(R.id.textView2);
         TextView addressTextView = findViewById(R.id.textView3);
@@ -25,6 +27,9 @@ public class AdViewActivity extends AppCompatActivity {
 
         titleTextView.setText(adTitle);
         addressTextView.setText(adAddress);
-        imageView.setImageResource(adImage);
+
+        // Chargez l'image avec Glide
+        Glide.with(this).load(adImage).into(imageView);
     }
+
 }
