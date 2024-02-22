@@ -54,9 +54,13 @@ public class AdAddActivity extends AppCompatActivity {
 
         TextInputLayout textInputLayout = findViewById(R.id.textInput_titre);
         TextInputLayout textInputLayoutAdresse = findViewById(R.id.textInput_adresse);
+        TextInputLayout textInputLayoutPhoneNumber = findViewById(R.id.textInput_phoneNumber);
+        TextInputLayout textInputLayoutEmail = findViewById(R.id.textInput_email);
 
         EditText textInputEditText = textInputLayout.getEditText(); // Change to EditText
-        EditText textInputEditTextAdresse = textInputLayoutAdresse.getEditText(); // Change to EditText
+        EditText textInputEditTextAdresse = textInputLayoutAdresse.getEditText();
+        EditText textInputEditTextPhoneNumber = textInputLayoutPhoneNumber.getEditText(); // Change to EditText
+        EditText textInputEditTextEmail = textInputLayoutEmail.getEditText();// Change to EditText
 
         Button validateButton = findViewById(R.id.button);
         Button photoButton = findViewById(R.id.photo);
@@ -88,6 +92,8 @@ public class AdAddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String titre = textInputEditText.getText().toString();
                 String adresse = textInputEditTextAdresse.getText().toString();
+                String phoneNumber = textInputEditTextPhoneNumber.getText().toString();
+                String email = textInputEditTextEmail.getText().toString();
 
                 if (titre.isEmpty() || adresse.isEmpty()) {
                     Toast.makeText(AdAddActivity.this, "Il manque des informations", Toast.LENGTH_SHORT).show();
@@ -96,7 +102,7 @@ public class AdAddActivity extends AppCompatActivity {
 
                 DBManager dbManager = DBManager.getDBManager(AdAddActivity.this);
                 dbManager.open();
-                dbManager.insert(new DBAdModel(titre, adresse, currentPhotoPath));
+                dbManager.insert(new DBAdModel(titre, adresse, currentPhotoPath, phoneNumber, email));
                 dbManager.close();
 
                 // Navigate back to the list view activity

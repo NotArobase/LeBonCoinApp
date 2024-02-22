@@ -14,6 +14,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String _ID = "_id";
     public static final String TITLE = "title";
     public static final String ADDRESS = "address";
+    public static final String PHONE_NUMBER = "phoneNumber"; // Nouvelle colonne pour le numéro de téléphone
+    public static final String EMAIL_ADDRESS = "email"; // Nouvelle colonne pour l'adresse e-mail
     public static final String IMAGE = "image";
 
     // Database Information
@@ -24,13 +26,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // Creating table query
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE + " TEXT NOT NULL, " + ADDRESS + " TEXT, " + IMAGE + " TEXT);";
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE + " TEXT NOT NULL, " + ADDRESS + " TEXT, " +
+            PHONE_NUMBER + " TEXT, " + EMAIL_ADDRESS + " TEXT, " + IMAGE + " TEXT);"; // Ajouter les nouvelles colonnes
 
     public DBHelper(Context context) {
-        super(context,
-                DB_NAME,
-                null,
-                DB_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
@@ -46,20 +46,21 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // Util if you want to add a clicklistener on specific ad in listview.
     public DBAdModel getById(long id) {
-        SQLiteDatabase db=this.getWritableDatabase();
-        String query="SELECT * FROM "+TABLE_NAME+" where "+ _ID + "=?";
-        Cursor data = db.rawQuery(query,new String[] {String.valueOf(id)});
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + _ID + "=?";
+        Cursor data = db.rawQuery(query, new String[]{String.valueOf(id)});
         if (data != null) {
             data.moveToFirst();
-        }
-        else{
+        } else {
             return null;
         }
 
         String title = data.getString(data.getColumnIndexOrThrow(TITLE));
         String address = data.getString(data.getColumnIndexOrThrow(ADDRESS));
         String image = data.getString(data.getColumnIndexOrThrow(IMAGE));
+        String phoneNumber = data.getString(data.getColumnIndexOrThrow(PHONE_NUMBER));
+        String email = data.getString(data.getColumnIndexOrThrow(EMAIL_ADDRESS));
 
-        return new DBAdModel(title, address, image);
+        return new DBAdModel(title, address, image, phoneNumber, email);
     }
 }

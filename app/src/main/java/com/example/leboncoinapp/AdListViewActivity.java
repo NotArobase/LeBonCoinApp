@@ -37,7 +37,9 @@ public class AdListViewActivity extends AppCompatActivity {
                 DBAdModel clickedAd = new DBAdModel(
                         cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.TITLE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.ADDRESS)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.IMAGE))
+                        cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.IMAGE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.EMAIL_ADDRESS)), // Ajout de l'e-mail
+                        cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.PHONE_NUMBER)) // Ajout du numéro de téléphone
                 );
 
                 // Passer les informations de l'annonce à l'activité AdViewActivity
@@ -45,9 +47,12 @@ public class AdListViewActivity extends AppCompatActivity {
                 intent.putExtra("adTitle", clickedAd.getTitle());
                 intent.putExtra("adAddress", clickedAd.getAddress());
                 intent.putExtra("adImage", clickedAd.getImage());
+                intent.putExtra("adEmail", clickedAd.getEmailAddress()); // Passer l'e-mail à l'activité AdViewActivity
+                intent.putExtra("adPhoneNumber", clickedAd.getPhoneNumber()); // Passer le numéro de téléphone à l'activité AdViewActivity
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
