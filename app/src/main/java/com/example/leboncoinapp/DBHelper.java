@@ -22,12 +22,12 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String DB_NAME = "LEBONCOINAPP.DB";
 
     // database version
-    static final int DB_VERSION = 1;
+    static final int DB_VERSION = 2;
 
     // Creating table query
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE + " TEXT NOT NULL, " + ADDRESS + " TEXT, " +
-            PHONE_NUMBER + " TEXT, " + EMAIL_ADDRESS + " TEXT, " + IMAGE + " TEXT);"; // Ajouter les nouvelles colonnes
+            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE + " TEXT NOT NULL, " + ADDRESS + " TEXT, " + IMAGE + " TEXT, " +
+            PHONE_NUMBER + " TEXT, " + EMAIL_ADDRESS + " TEXT);";
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

@@ -74,14 +74,14 @@ public class DBManager {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DBHelper.TITLE, ad.getTitle());
         contentValue.put(DBHelper.ADDRESS, ad.getAddress());
-        contentValue.put(DBHelper.IMAGE, ad.getImage());
-        contentValue.put(DBHelper.EMAIL_ADDRESS, ad.getEmailAddress()); // Ajout de l'adresse e-mail
-        contentValue.put(DBHelper.PHONE_NUMBER, ad.getPhoneNumber()); // Ajout du numéro de téléphone
+        contentValue.put(DBHelper.IMAGE, ad.getImage()); // Ajout de l'adresse e-mail
+        contentValue.put(DBHelper.PHONE_NUMBER, ad.getPhoneNumber());
+        contentValue.put(DBHelper.EMAIL_ADDRESS, ad.getEmailAddress()); // Ajout du numéro de téléphone
         database.insert(DBHelper.TABLE_NAME, null, contentValue);
     }
 
     public Cursor fetch() {
-        String[] columns = new String[] { DBHelper._ID, DBHelper.TITLE, DBHelper.ADDRESS, DBHelper.IMAGE};
+        String[] columns = new String[] { DBHelper._ID, DBHelper.TITLE, DBHelper.ADDRESS, DBHelper.IMAGE, DBHelper.PHONE_NUMBER, DBHelper.EMAIL_ADDRESS};
         Cursor cursor = database.query(DBHelper.TABLE_NAME, columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -94,8 +94,8 @@ public class DBManager {
         contentValues.put(DBHelper.TITLE, ad.getTitle());
         contentValues.put(DBHelper.ADDRESS, ad.getAddress());
         contentValues.put(DBHelper.IMAGE, ad.getImage());
-        contentValues.put(DBHelper.EMAIL_ADDRESS, ad.getEmailAddress()); // Mettre à jour l'adresse e-mail
-        contentValues.put(DBHelper.PHONE_NUMBER, ad.getPhoneNumber()); // Mettre à jour le numéro de téléphone
+        contentValues.put(DBHelper.PHONE_NUMBER, ad.getPhoneNumber());
+        contentValues.put(DBHelper.EMAIL_ADDRESS, ad.getEmailAddress());
         int i = database.update(DBHelper.TABLE_NAME, contentValues, DBHelper._ID + " = " + _id, null);
         return i;
     }
