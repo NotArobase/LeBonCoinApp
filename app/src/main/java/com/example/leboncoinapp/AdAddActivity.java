@@ -1,9 +1,7 @@
 package com.example.leboncoinapp;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import android.content.ActivityNotFoundException;
 import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
@@ -12,7 +10,6 @@ import java.io.InputStream;
 import android.os.Build;
 
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,9 +25,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Locale;
 import java.io.File;
@@ -71,10 +66,8 @@ public class AdAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(AdAddActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // Request the permission
                     ActivityCompat.requestPermissions(AdAddActivity.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
                 } else {
-                    // Permission has already been granted, launch camera app
                     dispatchTakePictureIntent();
                 }
             }
@@ -103,9 +96,7 @@ public class AdAddActivity extends AppCompatActivity {
                 DBManager dbManager = DBManager.getDBManager(AdAddActivity.this);
                 dbManager.open();
                 dbManager.insert(new DBAdModel(titre, adresse, currentPhotoPath, phoneNumber, email));
-                dbManager.close();
 
-                // Navigate back to the list view activity
                 Intent intent = new Intent(AdAddActivity.this, AdListViewActivity.class);
                 startActivity(intent);
             }
@@ -129,7 +120,7 @@ public class AdAddActivity extends AppCompatActivity {
                 Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            // No app can handle the intent
+
             Toast.makeText(this, "No camera app available", Toast.LENGTH_SHORT).show();
         }
     }
@@ -141,12 +132,12 @@ public class AdAddActivity extends AppCompatActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
+
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -162,24 +153,24 @@ public class AdAddActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            // Picture was taken successfully, display it
+
             setPic();
         } else if (requestCode == REQUEST_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
-            // Image selected from gallery
+
             Uri selectedImageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                // Save the image to a temporary file
+
                 File tempFile = createImageFile();
 
-                // Rotate the bitmap to correct orientation before saving
+
                 bitmap = rotateImageFromGallery(selectedImageUri, bitmap);
 
                 FileOutputStream out = new FileOutputStream(tempFile);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
                 out.close();
-                // Update the current photo path and display the image
+
                 currentPhotoPath = tempFile.getAbsolutePath();
                 setPic();
             } catch (IOException e) {
@@ -190,7 +181,6 @@ public class AdAddActivity extends AppCompatActivity {
     }
 
     private void setPic() {
-        // Decode the image file into a Bitmap without scaling
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
 
         try {
@@ -198,7 +188,6 @@ public class AdAddActivity extends AppCompatActivity {
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
             if (orientation != ExifInterface.ORIENTATION_UNDEFINED) {
-                // Orientation found in EXIF, rotate the image accordingly
                 bitmap = rotateBitmap(bitmap, orientation);
             }
         } catch (IOException e) {

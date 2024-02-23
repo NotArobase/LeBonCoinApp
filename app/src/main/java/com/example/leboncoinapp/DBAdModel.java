@@ -5,10 +5,10 @@ public class DBAdModel {
     private String address;
     private String image;
 
-    private String phoneNumber; // Nouveau champ pour le numéro de téléphone
+    private String phoneNumber;
     private String emailAddress;
 
-    // Constructor
+
     public DBAdModel(String title, String address, String image, String phoneNumber, String emailAddress) {
         this.title = title;
         this.address = address;
@@ -16,7 +16,6 @@ public class DBAdModel {
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
     }
-    // Getter and Setter
     public String getTitle() {
         return title;
     }

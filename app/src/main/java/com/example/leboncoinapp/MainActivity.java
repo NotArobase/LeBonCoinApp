@@ -66,6 +66,5 @@ public class MainActivity extends AppCompatActivity {
         DBManager dbManager = DBManager.getDBManager(this);
         dbManager.open();
         dbManager.resetDatabase();
-        // Notify the user that the database has been reset, if needed
     }
 }

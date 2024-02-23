@@ -8,11 +8,6 @@ import android.widget.AdapterView;
 import android.view.View;
 import android.content.Intent;
 import android.view.MenuItem;
-import androidx.core.content.ContextCompat;
-import android.net.Uri;
-import android.graphics.Bitmap;
-import java.io.ByteArrayOutputStream;
-import android.graphics.drawable.BitmapDrawable;
 import android.widget.CursorAdapter;
 import android.database.Cursor;
 
@@ -42,7 +37,6 @@ public class AdListViewActivity extends AppCompatActivity {
                         cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.PHONE_NUMBER)) // Ajout du numéro de téléphone
                 );
 
-                // Passer les informations de l'annonce à l'activité AdViewActivity
                 Intent intent = new Intent(AdListViewActivity.this, AdViewActivity.class);
                 intent.putExtra("adTitle", clickedAd.getTitle());
                 intent.putExtra("adAddress", clickedAd.getAddress());
@@ -68,7 +62,6 @@ public class AdListViewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Clear the activity stack and go back to MainActivity
         super.onBackPressed();
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

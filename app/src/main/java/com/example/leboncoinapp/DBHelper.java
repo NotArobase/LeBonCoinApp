@@ -14,17 +14,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String _ID = "_id";
     public static final String TITLE = "title";
     public static final String ADDRESS = "address";
-    public static final String PHONE_NUMBER = "phoneNumber"; // Nouvelle colonne pour le numéro de téléphone
-    public static final String EMAIL_ADDRESS = "email"; // Nouvelle colonne pour l'adresse e-mail
+    public static final String PHONE_NUMBER = "phoneNumber";
+    public static final String EMAIL_ADDRESS = "email";
     public static final String IMAGE = "image";
 
-    // Database Information
+
     static final String DB_NAME = "LEBONCOINAPP.DB";
 
-    // database version
     static final int DB_VERSION = 2;
 
-    // Creating table query
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE + " TEXT NOT NULL, " + ADDRESS + " TEXT, " + IMAGE + " TEXT, " +
             PHONE_NUMBER + " TEXT, " + EMAIL_ADDRESS + " TEXT);";
@@ -44,7 +42,6 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Util if you want to add a clicklistener on specific ad in listview.
     public DBAdModel getById(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + _ID + "=?";
