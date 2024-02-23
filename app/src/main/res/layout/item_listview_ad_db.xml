@@ -11,14 +11,14 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageIV"
+            android:id="@+id/image"
             android:layout_width="192dp"
             android:layout_height="108dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/titleTV"
+            app:layout_constraintBottom_toTopOf="@id/title"
             />
 
         <LinearLayout
@@ -28,28 +28,36 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/titleTV"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toTopOf="@id/adressTV"
-                app:layout_constraintStart_toEndOf="@id/imageIV"
-                app:layout_constraintTop_toTopOf="@id/imageIV" />
+                app:layout_constraintBottom_toTopOf="@id/adress"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toTopOf="@id/image" />
 
             />
 
             <TextView
-                android:id="@+id/adressTV"
+                android:id="@+id/adress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@id/imageIV"
-                app:layout_constraintStart_toEndOf="@id/imageIV"
-                app:layout_constraintTop_toBottomOf="@id/titleTV" />
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@id/adress" />
         </LinearLayout>
 
     </LinearLayout>
